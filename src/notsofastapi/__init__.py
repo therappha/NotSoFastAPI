@@ -1,2 +1,6 @@
+from notsofastapi.server import run_server
+
+
+
 def main() -> None:
-    print("Hello from notsofastapi!")
+    run_server()
