@@ -72,4 +72,5 @@ class HttpParser:
 
     @staticmethod
     def get_request_body(parsed_request: HttpRequest) -> bytes | None:
-        return None
+        header_bytes, body = parsed_request.raw_request.split(b"\r\n\r\n", 1)
+        return body

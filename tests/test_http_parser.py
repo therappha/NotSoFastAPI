@@ -13,6 +13,7 @@ class TestHttpParser:
         b"Accept-Language: pt-BR,pt;q=0.9,en;q=0.8\r\n"
         b"Connection: keep-alive\r\n"
         b"\r\n"
+        b"{test: body}"
     )
 
     def test_http_valid_parse_request_returns_http_request(self):
@@ -48,3 +49,7 @@ class TestHttpParser:
         assert parsed_request.headers["User-Agent"] == "curl/8.12.1"
         assert parsed_request.headers["Connection"] == "keep-alive"
         assert len(parsed_request.headers) == 5
+
+    def test_http_request_return_right_body(self):
+        parsed_request = HttpParser.parse_request(self.get_request)
+        assert parsed_request.body == b"{test: body}"
