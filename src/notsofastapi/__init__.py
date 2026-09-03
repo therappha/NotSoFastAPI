@@ -1,5 +1,4 @@
-from notsofastapi.server import run_server
-
+from notsofastapi.core.server import run_server
 
 
 def main() -> None:
