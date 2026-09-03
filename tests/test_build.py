@@ -1,5 +1,6 @@
 """File to test the if the build requirements are work"""
 
+
 class TestPyTestSetup:
     """Confirm build with pytest is working"""
 

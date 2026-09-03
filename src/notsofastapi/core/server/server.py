@@ -7,6 +7,7 @@ from notsofastapi.http import HttpParser
 
 def run_server():
     mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    mysocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     mysocket.bind((settings.IP_ADDRESS, settings.PORT))
     mysocket.listen(1)
     print(f"Started Server at: {settings.IP_ADDRESS}:{settings.PORT}")
@@ -18,10 +19,10 @@ def run_server():
         if not parsed_request:
             client_socket.close()
             continue
-
         if request == b"":
             client_socket.close()
             print("connection closed")
+        print(parsed_request.decoded_request[0])
         client_socket.send(
             "HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello World!".encode("utf-8")
         )
