@@ -2,7 +2,7 @@
 
 import socket
 from notsofastapi import settings
-from notsofastapi.http import HttpParser
+from notsofastapi.http import HttpParser, HttpResponse
 
 
 def run_server():
@@ -23,6 +23,4 @@ def run_server():
             client_socket.close()
             print("connection closed")
         print(parsed_request.decoded_request[0])
-        client_socket.send(
-            "HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello World!".encode("utf-8")
-        )
+        client_socket.send(HttpResponse('{"Hello": "World"}').encode_response())
