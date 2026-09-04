@@ -1,53 +1,57 @@
 from notsofastapi.http import HttpRequest, HttpMethod, HttpResponse, HttpStatus
-from abc import ABC, abstractmethod
+from abc import ABC
 
 
 class ApiView(ABC):
 
-    @abstractmethod
     def post(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @abstractmethod
     def get(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @abstractmethod
     def list(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @abstractmethod
     def patch(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @abstractmethod
     def put(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @abstractmethod
     def delete(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @abstractmethod
     def options(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @abstractmethod
     def head(self, request: HttpRequest) -> HttpResponse:
-        pass
+        return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
 
-    @classmethod
-    def _process_request(cls, request: HttpRequest) -> HttpResponse:
-        allowed_methods = cls._get_allowed_methods()
+    def _process_request(self, request: HttpRequest) -> HttpResponse:
+        allowed_methods = self._get_allowed_methods()
         if request.method not in allowed_methods:
-            return HttpResponse(status=HttpStatus.METHOD_NOT_ALLOWED)
-        return getattr(cls, request.method.lower())(request)
+            return HttpResponse(
+                '"message": "Not Allowed"', status=HttpStatus.METHOD_NOT_ALLOWED
+            )
+        return getattr(self, request.method.lower())(request)
 
     # TODO: remake this with list comprehension
     @classmethod
-    def _get_allowed_methods(cls) -> list[str]:
+    def _get_allowed_methods(cls):
         allowed_methods = []
         for name in cls.__dict__.keys():
             if name.upper() in HttpMethod:
                 allowed_methods.append(name.upper())
         return allowed_methods
+
+
+class MyView(ApiView):
+    def get(self, request):
+        return HttpResponse('"message": "get works"')
+
+    def post(self, request):
+        return HttpResponse('"message": "post works"')
+
+    def list(self, request):
+        return HttpResponse('"message": "list works"')
