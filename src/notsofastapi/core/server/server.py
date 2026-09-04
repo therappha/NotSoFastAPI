@@ -3,6 +3,7 @@
 import socket
 from notsofastapi import settings
 from notsofastapi.http import HttpParser, HttpResponse
+from notsofastapi.views.views import MyView
 
 
 def run_server():
@@ -22,5 +23,6 @@ def run_server():
         if request == b"":
             client_socket.close()
             print("connection closed")
-        print(parsed_request.decoded_request[0])
-        client_socket.send(HttpResponse('{"Hello": "World"}').encode_response())
+        response = MyView()._process_request(parsed_request)
+        print(f"{parsed_request.decoded_request[0]} {response.status}")
+        client_socket.send(response.encode_response())
